@@ -1,33 +1,31 @@
 import 'package:flutter/material.dart';
-import 'package:satthi/screens/onboarding/onboarding_screen.dart';
-import 'package:satthi/utils/color_scheme.dart';
-import 'package:satthi/utils/input_decoration_theme.dart';
-import 'package:satthi/utils/text_theme.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:satthi/blocs/auth/bloc/auth_bloc.dart';
+
+import 'repositories/auth_repository.dart';
+import 'screens/login_screen.dart';
 
 void main() {
-  runApp(const MyHome());
+  runApp(const SatthiApp());
 }
 
-class MyHome extends StatefulWidget {
-  const MyHome({super.key});
+class SatthiApp extends StatelessWidget {
+  const SatthiApp({Key? key}) : super(key: key);
 
   @override
-  State<MyHome> createState() => _MyHomeState();
-}
-
-class _MyHomeState extends State<MyHome> {
-  @override
-  
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        textTheme: satthiTextTheme,
-        colorScheme: satthiColorScheme,
-        inputDecorationTheme: satthiInputDecorationTheme,
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<AuthBloc>(
+          create: (context) => AuthBloc(authRepository: AuthRepository()),
+        ),
+      ],
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Satthi',
+        theme: ThemeData(primarySwatch: Colors.blue),
+        home: LoginScreen(),
       ),
-      home: OnboardingScreen(),
     );
   }
 }
